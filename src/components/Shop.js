@@ -6,7 +6,7 @@ export default function Shop() {
   return (
     <div className='item-list'>
       {Products.map((item) => (
-        <Item name={item.name} price={item.price} icon={item.icon} key={item.id} />
+        <Item object={item} key={item.id} />
       ))}
     </div>
   );

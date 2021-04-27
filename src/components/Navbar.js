@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Cart from './Cart';
 
 export default function Navbar(props) {
   const { sources } = props;
@@ -17,6 +18,7 @@ export default function Navbar(props) {
       </NavLink>
     );
   });
+
   return (
     <nav>
       <div className='logo'>
@@ -25,6 +27,7 @@ export default function Navbar(props) {
       <div className='links'>
         {links}
       </div>
+      <Cart />
     </nav>
   );
 }
