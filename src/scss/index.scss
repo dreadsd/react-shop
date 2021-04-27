@@ -30,5 +30,10 @@ body {
   scrollbar-width: none;  /* Firefox */
 }
 
+#root {
+  padding-bottom: 5rem;
+}
+
 @import "./items";
 @import "./navbar";
+@import "./icons";

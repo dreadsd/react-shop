@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function Item(props) {
-  const { name, price } = props;
+  const { name, price, icon } = props;
   return (
     <div className='item'>
       <div className='item-title'>{name}</div>
       <div className='item-image'>
-        <img src='#' alt={name} />
+        <i className={icon} />
       </div>
       <div className='item-price'>{price}</div>
     </div>
@@ -17,4 +17,5 @@ export default function Item(props) {
 Item.propTypes = {
   name: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired,
 };
