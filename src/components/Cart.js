@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PubSub from '../PubSub';
+import CartItem from './CartItem';
 
 export default function Cart() {
   const [items, setItems] = useState({});
@@ -13,25 +14,28 @@ export default function Cart() {
     setIsExpanded((val) => !val);
   };
   const addToCart = (data) => {
-    setCounter((v) => {
-      const received = { ...data };
-      setItems((v1) => {
-        const oldItems = { ...v1 };
-        received.id = v;
-        oldItems[data.id] = (oldItems[data.id] || []).concat(received);
-        return oldItems;
-      });
-      return v + 1;
+    setItems((v) => {
+      const oldItems = { ...v };
+      oldItems[data.id] = [
+        oldItems[data.id] ? oldItems[data.id][0] + 1 : 1,
+        data,
+      ];
+      return oldItems;
     });
+    setCounter((v) => v + 1);
   };
   const parseItems = () => {
     const parsed = [];
     Object.keys(items).forEach((key) => {
-      items[key].forEach((item) => {
-        parsed.push(
-          <div id={item.id} key={item.id} className={isExpanded ? 'expanded' : null}>{item.name}</div>,
-        );
-      });
+      parsed.push(
+        <CartItem
+          key={key}
+          expanded={isExpanded}
+          quantity={items[key][0]}
+          name={items[key][1].name}
+          price={items[key][1].price}
+        />,
+      );
     });
     return parsed;
   };

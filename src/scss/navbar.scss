@@ -53,7 +53,7 @@ nav {
   right: 4rem;
 }
 
-#item-cart-items * {
+#item-cart-items > * {
   transition: 0.1s;
   height: 0;
   overflow: hidden;
