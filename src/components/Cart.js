@@ -6,6 +6,7 @@ export default function Cart() {
   const [items, setItems] = useState({});
   const [isExpanded, setIsExpanded] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const expandCart = () => {
     const list = document.getElementById('item-cart-items');
@@ -14,15 +15,34 @@ export default function Cart() {
     setIsExpanded((val) => !val);
   };
   const addToCart = (data) => {
+    let price;
     setItems((v) => {
-      const oldItems = { ...v };
-      oldItems[data.id] = [
-        oldItems[data.id] ? oldItems[data.id][0] + 1 : 1,
-        data,
-      ];
+      const oldItems = JSON.parse(JSON.stringify(v));
+      price = +data.price;
+      if (oldItems[data.id]) {
+        oldItems[data.id][0] += 1;
+      } else {
+        oldItems[data.id] = [1, data];
+      }
       return oldItems;
     });
+    setTotal((v) => v + price);
     setCounter((v) => v + 1);
+  };
+  const removeFromCart = (id) => {
+    let price;
+    setItems((v) => {
+      const oldItems = JSON.parse(JSON.stringify(v));
+      price = +oldItems[id][1].price;
+      if (oldItems[id][0] <= 1) {
+        delete oldItems[id];
+      } else {
+        oldItems[id][0] -= 1;
+      }
+      return oldItems;
+    });
+    setTotal((v) => v - price);
+    setCounter((v) => v - 1);
   };
   const parseItems = () => {
     const parsed = [];
@@ -30,10 +50,9 @@ export default function Cart() {
       parsed.push(
         <CartItem
           key={key}
-          expanded={isExpanded}
           quantity={items[key][0]}
-          name={items[key][1].name}
-          price={items[key][1].price}
+          object={items[key][1]}
+          expanded={isExpanded}
         />,
       );
     });
@@ -42,18 +61,27 @@ export default function Cart() {
 
   useEffect(() => {
     PubSub.subscribe('add to cart', addToCart);
-    return PubSub.unsubscribe.bind(PubSub, 'add to cart', addToCart);
+    PubSub.subscribe('remove from cart', removeFromCart);
+    return () => {
+      PubSub.unsubscribe.bind(PubSub, 'add to cart', addToCart);
+      PubSub.unsubscribe.bind(PubSub, 'remove from cart', removeFromCart);
+    };
   }, []);
 
   return (
     <div id='cart'>
-      <div>{counter}</div>
       <div id='item-cart' onClick={expandCart}>
+        <div>{counter}</div>
         <i className='gg-shopping-cart' />
       </div>
       <div id='item-cart-items'>
         {parseItems()}
+        <div id='total-price'>
+          Total: $
+          {total}
+        </div>
       </div>
+      <hr />
     </div>
   );
 }
