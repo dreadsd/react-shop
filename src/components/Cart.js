@@ -8,11 +8,13 @@ export default function Cart() {
   const [counter, setCounter] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const expandCart = () => {
-    const list = document.getElementById('item-cart-items');
-    const method = isExpanded ? 'remove' : 'add';
-    Array.from(list.children).forEach((element) => element.classList[method]('expanded'));
-    setIsExpanded((val) => !val);
+  const expandCart = (e) => {
+    if (!e.code || e.code === 'Enter') {
+      const list = document.getElementById('item-cart-items');
+      const method = isExpanded ? 'remove' : 'add';
+      Array.from(list.children).forEach((element) => element.classList[method]('expanded'));
+      setIsExpanded((val) => !val);
+    }
   };
   const addToCart = (data) => {
     let price;
@@ -70,7 +72,7 @@ export default function Cart() {
 
   return (
     <div id='cart'>
-      <div id='item-cart' onClick={expandCart}>
+      <div id='item-cart' tabIndex='0' onClick={expandCart} onKeyPress={expandCart}>
         <div>{counter}</div>
         <i className='gg-shopping-cart' />
       </div>
