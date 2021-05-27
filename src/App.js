@@ -3,18 +3,15 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from 'react-router-dom';
 import Home from './components/Home';
 import Shop from './components/Shop';
+import Navbar from './components/Navbar';
 
 export default function App() {
   return (
     <Router>
-      <ul>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/shop'>Shop</Link></li>
-      </ul>
+      <Navbar sources={[{ url: '/', name: 'Home' }, { url: '/shop', name: 'Shop' }]} />
       <Switch>
         <Route path='/shop' component={Shop} />
         <Route path='/' component={Home} />
